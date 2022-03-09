@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = "Projeto backend do semestre 2021.2"
+authors = ["Felipe Bastos Nunes <felipebastos@ifce.edu.br>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Flask = "^2.0.3"
+dynaconf = "^3.1.7"
+toml = "^0.10.2"
+flaskstarter = "^0.5.2"
+
+[tool.poetry.dev-dependencies]
+black = "^22.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
