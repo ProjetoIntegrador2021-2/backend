@@ -12,17 +12,26 @@
 
 <body>
     <div class="flex-container">
+
+
+        {% for conversa in conv %}
         <div class="conversa">
             <h3>Conversa com Fulano</h3>
-            <p><b>{{usu.nome}} disse: </b>Estou falando sério</p>
-            <p><b>Fulano disse: </b>Deixa de ser mentiroso, bicho mentiroso</p>
+            {% for mensagem in conversa.mensagens %}
 
+            <p><b>{{mensagem.usuario.nome}} disse:</b> {{mensagem.texto}}</p>
+
+            {% endfor %}
             <form action="/exemplo/conversa/{{usu.id}}/{{usu.senha}}" method="post">
                 <input type="hidden" name="c_id" value="1">
                 <input type="text" name="fala" id="" placeholder="escreva sua fala">
                 <button type="submit">enviar</button>
             </form>
         </div>
+        {% endfor %}
+
+
+
     </div>
 </body>
 
