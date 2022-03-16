@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversas</title>
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+</head>
+
+<body>
+    <div class="flex-container">
+        <div class="conversa">
+            <h3>Conversa com Fulano</h3>
+            <p><b>{{usu.nome}} disse: </b>Estou falando sério</p>
+            <p><b>Fulano disse: </b>Deixa de ser mentiroso, bicho mentiroso</p>
+
+            <form action="/exemplo/conversa/{{usu.id}}/{{usu.senha}}" method="post">
+                <input type="hidden" name="c_id" value="1">
+                <input type="text" name="fala" id="" placeholder="escreva sua fala">
+                <button type="submit">enviar</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

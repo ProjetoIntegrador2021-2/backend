@@ -1,0 +1,9 @@
+div.conversa {
+    border: 1px solid black;
+    background-color: darkgray;
+    padding: 0.2em;
+}
+
+div.flex-container {
+    display: flex;
+}

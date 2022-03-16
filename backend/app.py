@@ -7,6 +7,6 @@ def create_app() -> Flask:
     app = Flask(__name__)
     configuration.init_app(app)
 
-    app.add_url_rule('/', view_func=root)
+    app.add_url_rule("/", view_func=root)
 
     return app
