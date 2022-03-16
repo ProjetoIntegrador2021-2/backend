@@ -11,6 +11,9 @@ Flask = "^2.0.3"
 dynaconf = "^3.1.7"
 toml = "^0.10.2"
 flaskstarter = "^0.5.3"
+Flask-Migrate = "^3.1.0"
+Flask-SQLAlchemy = "^2.5.1"
+gunicorn = "^20.1.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
