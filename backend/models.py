@@ -1,7 +1,14 @@
 from backend.ext.database import db
+from backend.ext.auth import login_manager
+from flask_login import UserMixin
 
 
-class Usuario(db.Model):
+@login_manager.user_loader
+def carregaUsuario(id):
+    return Usuario.query.get(id)
+
+
+class Usuario(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(30), unique=True, nullable=False)
     senha = db.Column(db.String(100), nullable=False)
