@@ -8,6 +8,7 @@ license = "Apache-2.0"
 [tool.poetry.dependencies]
 python = "^3.9"
 Flask = "^2.0.3"
+Werkzeug="2.0.3"
 dynaconf = "^3.1.7"
 toml = "^0.10.2"
 flaskstarter = "^0.5.3"
