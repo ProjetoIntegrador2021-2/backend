@@ -143,14 +143,14 @@ dotenv = ["python-dotenv"]
 
 [[package]]
 name = "flask-bcrypt"
-version = "0.7.1"
+version = "1.0.1"
 description = "Brcrypt hashing for Flask."
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-bcrypt = "*"
+bcrypt = ">=3.1.1"
 Flask = "*"
 
 [[package]]
@@ -475,7 +475,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "3778d33d6d111a398adb426ea8139a265215ef43f5d3a77d206b2be4aa753450"
+content-hash = "516774e4cf9a58a62f2736d0cf8fbac744134e688443f8171d6e87339c692253"
 
 [metadata.files]
 alembic = [
@@ -596,7 +596,8 @@ flask = [
     {file = "Flask-2.1.1.tar.gz", hash = "sha256:a8c9bd3e558ec99646d177a9739c41df1ded0629480b4c8d2975412f3c9519c8"},
 ]
 flask-bcrypt = [
-    {file = "Flask-Bcrypt-0.7.1.tar.gz", hash = "sha256:d71c8585b2ee1c62024392ebdbc447438564e2c8c02b4e57b56a4cafd8d13c5f"},
+    {file = "Flask-Bcrypt-1.0.1.tar.gz", hash = "sha256:f07b66b811417ea64eb188ae6455b0b708a793d966e1a80ceec4a23bc42a4369"},
+    {file = "Flask_Bcrypt-1.0.1-py3-none-any.whl", hash = "sha256:062fd991dc9118d05ac0583675507b9fe4670e44416c97e0e6819d03d01f808a"},
 ]
 flask-login = [
     {file = "Flask-Login-0.6.0.tar.gz", hash = "sha256:aa84fcfb4c3cf09ca58c08e816b7bce73f1349ba1cf13d00d8dffc5872d5fcf6"},

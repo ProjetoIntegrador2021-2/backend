@@ -72,8 +72,9 @@ colorama==0.4.4; python_version >= "3.7" and python_full_version < "3.0.0" and p
 dynaconf==3.1.7; python_version >= "3.7" \
     --hash=sha256:f52fe5db7622da56a552275e8f64e4df46e3b4ae11158831b042e8ba2f6d1c96 \
     --hash=sha256:e9d80b46ba4d9372f2f40c812594c963f74178140c0b596e57f2881001fc4d35
-flask-bcrypt==0.7.1 \
-    --hash=sha256:d71c8585b2ee1c62024392ebdbc447438564e2c8c02b4e57b56a4cafd8d13c5f
+flask-bcrypt==1.0.1 \
+    --hash=sha256:f07b66b811417ea64eb188ae6455b0b708a793d966e1a80ceec4a23bc42a4369 \
+    --hash=sha256:062fd991dc9118d05ac0583675507b9fe4670e44416c97e0e6819d03d01f808a
 flask-login==0.6.0; python_version >= "3.7" \
     --hash=sha256:aa84fcfb4c3cf09ca58c08e816b7bce73f1349ba1cf13d00d8dffc5872d5fcf6 \
     --hash=sha256:5cb01ce4dc253967b6ac722a11e46de83b6272ef7a19cc7b5725ae636916d04d
