@@ -192,11 +192,11 @@ SQLAlchemy = ">=0.8.0"
 
 [[package]]
 name = "flaskstarter"
-version = "0.5.4"
+version = "0.6.1"
 description = "A Flask project start-up CLI to create Flask modular ready projects."
 category = "main"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
 click = ">=8.0.4,<9.0.0"
@@ -475,7 +475,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "460188a41f55313ee9585da3b3e85866ba7774596ab3c5259de0de1c9d0efa34"
+content-hash = "3778d33d6d111a398adb426ea8139a265215ef43f5d3a77d206b2be4aa753450"
 
 [metadata.files]
 alembic = [
@@ -611,8 +611,8 @@ flask-sqlalchemy = [
     {file = "Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl", hash = "sha256:f12c3d4cc5cc7fdcc148b9527ea05671718c3ea45d50c7e732cceb33f574b390"},
 ]
 flaskstarter = [
-    {file = "flaskstarter-0.5.4-py3-none-any.whl", hash = "sha256:f7149d9ea7b1115fe4a1020ef06102a2ed92b216331a17f55ae5c36e09788d2a"},
-    {file = "flaskstarter-0.5.4.tar.gz", hash = "sha256:bc84f9251cbe14c7562b1596babc2f811e31c4ba84d750c6297a790011722e30"},
+    {file = "flaskstarter-0.6.1-py3-none-any.whl", hash = "sha256:9b4d92424cfe084eba78e95ca9698e2ee4082d66532a01ae9fb16e7c4ff2c27b"},
+    {file = "flaskstarter-0.6.1.tar.gz", hash = "sha256:cb1f89a51ed4eea0aa017815a68be2345d62e97c8ebc072d510a64c6a6de06e6"},
 ]
 greenlet = [
     {file = "greenlet-1.1.2-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:58df5c2a0e293bf665a51f8a100d3e9956febfbf1d9aaf8c0677cf70218910c6"},
