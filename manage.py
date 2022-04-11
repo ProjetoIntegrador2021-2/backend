@@ -87,16 +87,20 @@ def plug_blueprint(name: str, templates: bool):
         exit(0)
     os.mkdir(os.path.join(os.getcwd(), "backend", "blueprints", name))
     if templates:
-        tf = os.path.join(os.getcwd(), "backend", "blueprints", name, "templates", name)
+        tf = os.path.join(
+            os.getcwd(), "backend", "blueprints", name, "templates", name
+        )
         os.makedirs(tf)
         click.echo(f"Placed this blueprint's templates under {tf}")
 
     init = open(
-        os.path.join(os.getcwd(), "backend", "blueprints", name, "__init__.py"), "w"
+        os.path.join(os.getcwd(), "backend", "blueprints", name, "__init__.py"),
+        "w",
     )
     init.close()
     with open(
-        os.path.join(os.getcwd(), "backend", "blueprints", name, f"{name}.py"), "w"
+        os.path.join(os.getcwd(), "backend", "blueprints", name, f"{name}.py"),
+        "w",
     ) as blueprint:
         bluet = get_template("blueprint.pyt")
         blueprint.write(bluet.render(name=name, templates=templates))
@@ -140,24 +144,24 @@ def plug_database():
         db_template = get_template("database.pyt")
         db_module.write(db_template.render(name="backend"))
     # models.py (basic example)
-    with open(os.path.join(os.getcwd(), "backend", "models.py"), "w") as models_file:
+    with open(
+        os.path.join(os.getcwd(), "backend", "models.py"), "w"
+    ) as models_file:
         mod_template = get_template("models.pyt")
         models_file.write(mod_template.render(project="backend"))
     # settings.toml
     settings = toml.load(os.path.join(os.getcwd(), "instance", "settings.toml"))
     settings["default"]["EXTENSIONS"].append("backend.ext.database:init_app")
-    settings["default"]["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-        os.getcwd(), "instance", "db.sqlite3"
-    )
+    settings["default"][
+        "SQLALCHEMY_DATABASE_URI"
+    ] = "sqlite:///" + os.path.join(os.getcwd(), "instance", "db.sqlite3")
     with open(os.path.join(os.getcwd(), "instance", "settings.toml"), "w") as f:
         f.write(toml.dumps(settings))
 
     click.echo("Creating migrations directory")
     cmd = ""
     if os.name == "posix":
-        cmd = (
-            f"export FLASK_APP=backend.app; export FLASK_ENV=development; flask db init"
-        )
+        cmd = f"export FLASK_APP=backend.app; export FLASK_ENV=development; flask db init"
         subprocess.run(cmd, shell=True)
     elif os.name == "nt":
         cmd = f'$env:FLASK_APP = "backend.app"; $env:FLASK_ENV = "development"; flask db init'

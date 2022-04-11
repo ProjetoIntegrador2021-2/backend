@@ -7,7 +7,9 @@ from backend.ext.auth import bcrypt
 from backend.models import Usuario, Mensagem, Conversa
 
 
-bp = Blueprint("exemplo", __name__, url_prefix="/exemplo", template_folder="templates")
+bp = Blueprint(
+    "exemplo", __name__, url_prefix="/exemplo", template_folder="templates"
+)
 
 
 @bp.route("/login", methods=["GET", "POST"])
@@ -68,7 +70,9 @@ def conversa(idb, senha):
         conversas = Conversa.query.filter_by(part_a_id=idb).all()
         if request.method == "POST":
             pass
-        return render_template("exemplo/conversa.html", usu=usuario, conv=conversas)
+        return render_template(
+            "exemplo/conversa.html", usu=usuario, conv=conversas
+        )
 
     return "Seu usuário e código de segurança não conferem."
 
