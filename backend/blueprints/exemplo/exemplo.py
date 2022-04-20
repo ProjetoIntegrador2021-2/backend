@@ -1,3 +1,4 @@
+'''
 from flask import Blueprint, request, render_template
 
 from flask_login import login_required, login_user, logout_user
@@ -75,7 +76,7 @@ def conversa(idb, senha):
         )
 
     return "Seu usuário e código de segurança não conferem."
-
+'''
 
 @bp.route("/mensagem/<int:idu>/<texto>")
 def mensagem(idu, texto):
