@@ -21,8 +21,6 @@ def cadastro_cliente():
     else:
         return "Não deu certo"
 
-@bp.route("/inicio")
-def teste():
-    return "oi"
+
 def init_app(app):
     app.register_blueprint(bp)
