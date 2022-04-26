@@ -9,6 +9,16 @@ def carregaCliente(id):
 
 class Cliente(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(400), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    senha = db.Column(db.String(100), nullable=False)
+    nome = db.Column("Nome", db.String(400), nullable=False)
+    email = db.Column("Email", db.String(100), unique=True, nullable=False)
+    senha = db.Column("Senha", db.String(100), nullable=False)
+
+def carregaEntregador(id):
+    return Entregador.query.get(id)
+
+class Entregador(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    veiculo = db.Column("Veiculo", db.Boolean, default=False)
+    regiao = db.Column("Regiao", db.Boolean, default=False)
+
+    cliente_id = db.Column(db.Integer, db.ForeignKey("cliente.id"))
