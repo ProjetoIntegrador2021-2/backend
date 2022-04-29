@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from flask_login import login_user
+from backend.ext.auth import bcrypt
 from backend.models import Cliente
 from backend.ext.database import db
 
@@ -12,7 +13,11 @@ def cadastro_cliente():
         novo = Cliente()
         novo.nome = request.form["nome"]
         novo.email = request.form["email"]
-        novo.senha = request.form["senha"]
+        senha_adicionada = request.form["senha"]
+
+        senha_criptografada = bcrypt.generate_password_hash(senha_adicionada)
+
+        novo.senha = senha_criptografada
 
         db.session.add(novo)
         db.session.commit()
@@ -31,9 +36,10 @@ def login_cliente():
 
         if not cliente:
             return "Cliente não cadastrado",404
-        if cliente.senha == senha:
+
+        if bcrypt.check_password_hash(cliente.senha, senha):
             login_user(cliente)
-            return "Deu certo!"
+            return "Seja bem-vindo novamente"
 
 def init_app(app):
     app.register_blueprint(bp)
