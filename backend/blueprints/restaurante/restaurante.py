@@ -11,8 +11,6 @@ def cadastro_restaurante():
     if request.method == "POST":
         novo = Restaurante()
         novo.nome = request.form["nome"]
-        novo.email = request.form["email"]
-        novo.senha = request.form["senha"]
         novo.endereco = request.form["endereco"]
         novo.cidade = request.form["cidade"]
 

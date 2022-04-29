@@ -5,3 +5,4 @@ from backend.models import Restaurante
 
 def root():
     return render_template("index.html")
+

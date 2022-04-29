@@ -11,6 +11,8 @@ def carregaCliente(id):
 def carregaEntregador(id):
     return Entregador.query.get(id)
 
+def carregaRestaurante(id):
+    return Restaurante.query.get(id)
 
 class Cliente(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,8 +29,9 @@ class Entregador(db.Model, UserMixin):
 
 class Restaurante(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column('Nome', db.String(400), nullable=False)
-    email = db.Column('Email', db.String(100), unique=True, nullable=False)
-    senha = db.Column('Senha', db.String(100), nullable=False)
+    nome_restaurante = db.Column('Nome', db.String(400), nullable=False)
     endereco = db.Column('Endereço', db.String(200), nullable=False)
     cidade = db.Column('Cidade', db.Boolean, default=False)
+
+    cliente_id = db.Column(db.Integer, db.ForeignKey("cliente.id"))
+
