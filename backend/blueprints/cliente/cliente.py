@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from backend.ext.auth import bcrypt
 from backend.models import Cliente
 from backend.ext.database import db
@@ -40,6 +40,12 @@ def login_cliente():
         if bcrypt.check_password_hash(cliente.senha, senha):
             login_user(cliente)
             return "Seja bem-vindo novamente"
+
+@bp.route("/logout_cliente")
+def logout_cliente():
+    logout_user()
+    return "Você saiu da sua conta."
+
 
 def init_app(app):
     app.register_blueprint(bp)
