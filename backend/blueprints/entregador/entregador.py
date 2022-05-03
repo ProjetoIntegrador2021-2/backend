@@ -3,11 +3,15 @@ from backend.models import Entregador
 from backend.ext.database import db
 
 
+bp = Blueprint(
+    "entregador",
+    __name__,
+    url_prefix="/entregador",
+    template_folder="templates",
+)
 
-bp = Blueprint('entregador', __name__, url_prefix='/entregador', template_folder='templates')
 
-
-@bp.route('/cadastro_entregador', methods=["GET", "POST"])
+@bp.route("/cadastro_entregador", methods=["GET", "POST"])
 def cadastro_entregador():
     if request.method == "POST":
         novo = Entregador()
@@ -20,7 +24,6 @@ def cadastro_entregador():
         return "Bem-vindo ao Flash Food, entregador! Venha gastar sua gasolina com a gente!"
     else:
         return "Dança da motinha"
-
 
 
 def init_app(app):

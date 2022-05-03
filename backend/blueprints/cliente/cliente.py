@@ -5,7 +5,10 @@ from backend.models import Cliente
 from backend.ext.database import db
 
 
-bp = Blueprint('cliente', __name__, url_prefix="/cliente", template_folder='templates')
+bp = Blueprint(
+    "cliente", __name__, url_prefix="/cliente", template_folder="templates"
+)
+
 
 @bp.route("/cadastro_cliente", methods=["GET", "POST"])
 def cadastro_cliente():
@@ -26,6 +29,7 @@ def cadastro_cliente():
     else:
         return "Não deu certo"
 
+
 @bp.route("/login_cliente", methods=["GET", "POST"])
 def login_cliente():
     if request.method == "POST":
@@ -35,11 +39,12 @@ def login_cliente():
         cliente = Cliente.query.filter_by(email=email).first()
 
         if not cliente:
-            return "Cliente não cadastrado",404
+            return "Cliente não cadastrado", 404
 
         if bcrypt.check_password_hash(cliente.senha, senha):
             login_user(cliente)
             return "Seja bem-vindo novamente"
+
 
 @bp.route("/logout_cliente")
 def logout_cliente():

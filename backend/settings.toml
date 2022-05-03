@@ -1,0 +1,2 @@
+[default]
+EXTENSIONS = [ "backend.ext.auth:init_app", "backend.ext.database:init_app", "backend.blueprints.cliente.cliente:init_app", "backend.blueprints.entregador.entregador:init_app", "backend.blueprints.restaurante.restaurante:init_app", ]

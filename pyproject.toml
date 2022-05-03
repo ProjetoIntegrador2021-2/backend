@@ -2,7 +2,7 @@
 name = "backend"
 version = "0.1.0"
 description = "Projeto backend do semestre 2021.2"
-authors = ["Felipe Bastos Nunes <felipebastos@ifce.edu.br>"]
+authors = ["Felipe Bastos Nunes <felipebastos@ifce.edu.br>", "Silas Santiago <silas.santiago@ifce.edu.br", "Odara Sena <odara@ifce.edu.br>", "Valter Costa <valter.costa@ifce.edu.br"]
 license = "Apache-2.0"
 
 [tool.poetry.dependencies]
@@ -11,7 +11,7 @@ Flask = "^2.0.3"
 Werkzeug="^2.0.3"
 dynaconf = "^3.1.7"
 toml = "^0.10.2"
-flaskstarter = "^0.6.0"
+flaskstarter = "^0.7"
 Flask-Migrate = "^3.1.0"
 Flask-SQLAlchemy = "^2.5.1"
 gunicorn = "^20.1.0"
@@ -21,6 +21,7 @@ Flask-Bcrypt = "^1.0.1"
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
 pylint = "^2.12.2"
+requests = "^2.27.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
