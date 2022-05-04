@@ -7,22 +7,27 @@ from backend.ext.database import db
 
 bp = Blueprint('cliente', __name__, url_prefix="/cliente", template_folder='templates')
 
-@bp.route("/cadastro_cliente", methods=["GET", "POST"])
+@bp.route("login_cliente/cadastro_cliente", methods=["GET", "POST"])
 def cadastro_cliente():
     if request.method == "POST":
         novo = Cliente()
         novo.nome = request.form["nome"]
         novo.email = request.form["email"]
         senha_adicionada = request.form["senha"]
+        senha_confirma = request.form["senha_confirma"]
 
-        senha_criptografada = bcrypt.generate_password_hash(senha_adicionada)
+        if senha_adicionada == senha_confirma:
 
-        novo.senha = senha_criptografada
+            senha_criptografada = bcrypt.generate_password_hash(senha_adicionada)
 
-        db.session.add(novo)
-        db.session.commit()
+            novo.senha = senha_criptografada
 
-        return "Bem-vindo ao FoodFlash"
+            db.session.add(novo)
+            db.session.commit()
+
+            return "Bem-vindo ao FoodFlash"
+        else:
+            return "Erro na confirmação de senha"
     else:
         return "Não deu certo"
 
@@ -46,6 +51,8 @@ def logout_cliente():
     logout_user()
     return "Você saiu da sua conta."
 
-
+@bp.route("/perfil_cliente")
+def perfil_cliente():
+    return "Você acessou a página de perfil"
 def init_app(app):
     app.register_blueprint(bp)
