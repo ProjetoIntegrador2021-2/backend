@@ -21,15 +21,15 @@ class Cliente(db.Model, UserMixin):
     senha = db.Column("Senha", db.String(100), nullable=False)
     cpf = db.Column("CPF", db.String(11))
     telefone = db.Column("Telefone", db.String(11))
+    endereco = db.Column("Endereço", db.String(200))
 
 class Entregador(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     veiculo = db.Column("Veiculo", db.Boolean, default=False)
-    regiao = db.Column("Regiao", db.Boolean, default=False)
+    regiao = db.Column("Regiao", db.String(200))
     contato = db.Column("Contato", db.String(11), nullable=False)
     cpf = db.Column("CPF", db.String(11), nullable = False, unique = True)
     cnh = db.Column("CNH", db.String(11), unique = True, nullable = False)
-    telefone = db.Column("Telefone", db.String(11), nullable = False)
 
     cliente_id = db.Column(db.Integer, db.ForeignKey("cliente.id"))
 
