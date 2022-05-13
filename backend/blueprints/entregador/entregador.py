@@ -1,7 +1,6 @@
 from flask import Blueprint, request, render_template, redirect
-from flask_login import login_user
+from flask_login import current_user
 from backend.models import Entregador, Cliente
-from backend.ext.auth import bcrypt
 from backend.ext.database import db
 
 
@@ -12,7 +11,7 @@ bp = Blueprint('entregador', __name__, url_prefix='/entregador', template_folder
 def parceria():
     return render_template('entregador/parceria.html')
 
-@bp.route('/login_entregador/cadastro_entregador', methods=["GET", "POST"])
+@bp.route('/cadastro_entregador', methods=["GET", "POST"])
 def cadastro_entregador():
     regioes = {
     '--------': '--------',
@@ -22,7 +21,6 @@ def cadastro_entregador():
     }
     if request.method == "POST":
         email=request.form["email"]
-        senha=request.form["senha"]
 
         cliente= Cliente.query.filter_by(email=email).first()
         if not cliente:
@@ -39,30 +37,46 @@ def cadastro_entregador():
             db.session.add(novo)
             db.session.commit()
 
-            return redirect("/entregador/pagina_entregador")
+            return redirect("/cliente/pagina_cliente")
     else:
         return render_template("entregador/cadastro_entregador.html", regioes=regioes)
 
-@bp.route('/login_entregador', methods=["GET", "POST"])
-def login_entregador():
+
+@bp.route("/pagina_entregador/<int:id>")
+def pagina_entregador(id):
+    cliente= current_user
+    entregador = Cliente.query.get_or_404(id)
+    return render_template("entregador/pagina_entregador.html", entregador=entregador, cliente=cliente)
+
+@bp.route("/perfil_entregador")
+def perfil_entregador():
+    cliente = current_user
+    entregador = Entregador.query.filter_by(cliente_id = cliente.id).first()
+    return render_template("entregador/perfil_entregador.html", entregador=entregador)
+
+@bp.route("/perfil_entregador/editar_perfil/<int:id>", methods = ["GET", "POST"])
+def editar_perfil(id):
+    regioes = {
+    '--------': '--------',
+    'Aracati':'ARACATI',
+    'Fortim':'FORTIM',
+    'Icapuí': 'ICAPUÍ',
+    }
+    edit = Entregador.query.get_or_404(id)
     if request.method == "POST":
-        email = request.form["email"]
-        senha = request.form["senha"]
-
-        entregador = Entregador.query.filter_by(cliente_id=email).first()
-
-        if not entregador:
-            return "Entregador não cadastrado", 404
-
-        if bcrypt.check_password_hash(entregador.senha, senha):
-            login_user(entregador)
-            return redirect ("/entregador/pagina_entregador")
+        edit.regiao = request.form.get("regiao")
+        edit.contato = request.form["contato"]
+        edit.cpf = request.form["cpf"]
+        edit.cnh = request.form["cnh"]
+        edit.veiculo = request.form["veiculo"]
+        try:
+            db.session.add(edit)
+            db.session.commit()
+            return redirect("/entregador/perfil_entregador")
+        except:
+            return "Não deu certo fazer o update"
     else:
-        return render_template("entregador/login_entregador.html")
-
-@bp.route("/pagina_entregador")
-def pagina_entregador():
-    return render_template("entregador/pagina_entregador.html")
+        return render_template("entregador/editar_perfil.html", entregador=edit, regioes=regioes)
 
 def init_app(app):
     app.register_blueprint(bp)

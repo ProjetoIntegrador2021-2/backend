@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required, current_user
 from backend.ext.auth import bcrypt
-from backend.models import Cliente
+from backend.models import Cliente, Restaurante, Entregador
 from backend.ext.database import db
 
 
@@ -51,21 +51,40 @@ def login_cliente():
             return redirect ("/cliente/pagina_cliente")
     else:
         return render_template("cliente/login_cliente.html")
+
 @bp.route("/logout_cliente")
+@login_required
 def logout_cliente():
     logout_user()
     return "Você saiu da sua conta."
 
 @bp.route("/pagina_cliente")
+@login_required
 def pagina_cliente():
-    return render_template("cliente/pagina_cliente.html")
+    cliente=current_user
+    restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
+    entregador = Entregador.query.filter_by(cliente_id = cliente.id).first()
+
+    if restaurante is not None:
+        restaurante_verifica = True
+    else:
+        restaurante_verifica = False
+
+    if entregador is not None:
+        entregador_verifica = True
+    else:
+        entregador_verifica = False
+
+    return render_template("cliente/pagina_cliente.html", restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador)
 
 @bp.route("/perfil_cliente")
+@login_required
 def perfil_cliente():
-    cliente = Cliente()
+    cliente = current_user
     return render_template("cliente/perfil_cliente.html", cliente=cliente)
 
 @bp.route("/perfil_cliente/editar_perfil/<int:id>", methods = ["GET", "POST"])
+@login_required
 def editar_perfil(id):
     edit = Cliente.query.get_or_404(id)
     if request.method == "POST":
