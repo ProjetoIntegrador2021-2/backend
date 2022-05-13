@@ -1,0 +1,12 @@
+<h1>Seja bem-vindo, cliente</h1>
+<hr>
+<a href = "/cliente/perfil_cliente">Entre no seu perfil</a>
+<hr>
+{% if restaurante_v == True %}
+    <a href = "/restaurante/pagina_restaurante/{{restaurante.id}}">Acesse página do seu restaurante</a>
+{% endif %}
+<hr>
+{% if entregador_v == True %}
+    <a href = "/entregador/pagina_entregador/{{entregador.id}}">Acesse página do Entregador</a>
+    <hr>
+{% endif %}

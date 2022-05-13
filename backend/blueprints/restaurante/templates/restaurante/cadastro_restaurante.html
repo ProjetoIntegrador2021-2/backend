@@ -1,0 +1,28 @@
+<h1>Cadastre-se, dono de restaurante</h1>
+<form method="post">
+    <input type="email" name="email" placeholder="fulano@fulano.com"><br>
+    <input type="text" name="nome_restaurante" placeholder="Nome do restaurante"><br>
+    <input type="text" name="endereco" placeholder="Endereço"><br>
+    <label for="cidade">Cidade:</label>
+    <select name="cidade">
+        {% for cidade in cidades %}
+        <option value="{{cidade}}">
+            {{cidades[cidade]}}
+        </option>
+        {% endfor %}
+    </select><br>
+    <label for="categoria">Categoria:</label>
+    <select name="categoria">
+        {% for categoria in categorias %}
+        <option value="{{categoria}}">
+            {{categorias[categoria]}}
+        </option>
+        {% endfor %}
+    </select><br>
+    <input type="text" name="cnpj" placeholder="CNPJ"><br>
+    <label for="inicio">Abre:</label>
+    <input type="time" name="funcionamento_inicio"><br>
+    <label for="termino">Fecha:</label>
+    <input type="time" name="funcionamento_termino"><br>
+    <input type="submit" value="Cadastrar">
+</form>

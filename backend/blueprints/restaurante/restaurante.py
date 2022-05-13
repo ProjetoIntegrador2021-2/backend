@@ -1,5 +1,6 @@
-from flask import Blueprint, request
-from backend.models import Restaurante
+from flask import Blueprint, request, redirect, render_template
+from backend.models import Restaurante, Cliente
+from flask_login import current_user
 from backend.ext.database import db
 
 
@@ -8,18 +9,87 @@ bp = Blueprint('restaurante', __name__, url_prefix='/restaurante', template_fold
 
 @bp.route("/cadastro_restaurante", methods=["GET", "POST"])
 def cadastro_restaurante():
+    cidades = {
+        "-------": "--------",
+        "Aracati": "ARACATI",
+        "Fortim": "FORTIM",
+        "Icapuí": "ICAPUÍ",
+        }
+
+    categorias = {
+        "-------":"-------",
+        "pizza": "PIZZA",
+        "doces":"DOCES",
+        "hamburguer":"HAMBURGUER",
+        }
     if request.method == "POST":
-        novo = Restaurante()
-        novo.nome = request.form["nome"]
-        novo.endereco = request.form["endereco"]
-        novo.cidade = request.form["cidade"]
+        email= request.form["email"]
 
-        db.session.add(novo)
-        db.session.commit()
+        cliente= Cliente.query.filter_by(email=email).first()
 
-        return "Boas vendas!"
+        if not cliente:
+           return "Você não é cadastrado como cliente"
+        else:
+            novo = Restaurante()
+            novo.nome_restaurante = request.form["nome_restaurante"]
+            novo.endereco = request.form["endereco"]
+            novo.cidade = request.form.get("cidade")
+            novo.categoria = request.form.get("categoria")
+            novo.cnpj = request.form["cnpj"]
+            novo.funcionamento_inicio = request.form["funcionamento_inicio"]
+            novo.funcionamento_termino = request.form["funcionamento_termino"]
+            novo.cliente_id = cliente.id
+
+            db.session.add(novo)
+            db.session.commit()
+
+        return redirect("/cliente/pagina_cliente")
     else:
-        return "Não tenham boas vendas"
+        return render_template("restaurante/cadastro_restaurante.html", cidades=cidades, categorias=categorias)
+
+
+@bp.route("/pagina_restaurante/<int:id>")
+def pagina_restaurante(id):
+    restaurante = Restaurante.query.get_or_404(id)
+    return render_template("restaurante/pagina_restaurante.html", restaurante=restaurante)
+
+@bp.route("/perfil_restaurante/")
+def perfil_restaurante():
+    cliente = current_user
+    restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
+    return render_template("restaurante/perfil_restaurante.html", restaurante=restaurante)
+
+@bp.route("/perfil_restaurante/editar_perfil/<int:id>", methods=["GET", "POST"])
+def editar_perfil(id):
+    cidades = {
+        "-------": "--------",
+        "Aracati": "ARACATI",
+        "Fortim": "FORTIM",
+        "Icapuí": "ICAPUÍ",
+        }
+
+    categorias = {
+        "-------":"-------",
+        "pizza": "PIZZA",
+        "doces":"DOCES",
+        "hamburguer":"HAMBURGUER",
+        }
+    edit = Restaurante.query.get_or_404(id)
+    if request.method == "POST":
+        edit.nome_restaurante = request.form["nome_restaurante"]
+        edit.endereco = request.form["endereco"]
+        edit.cidade = request.form.get("cidade")
+        edit.categoria = request.form.get("categoria")
+        edit.funcionamento_inicio = request.form["funcionamento_inicio"]
+        edit.funcionamento_termino = request.form["funcionamento_termino"]
+        try:
+            db.session.add(edit)
+            db.session.commit()
+            return redirect ("/restaurante/perfil_restaurante")
+        except:
+            return "Não deu certo o update"
+    else:
+        return render_template("restaurante/editar_perfil.html", restaurante=edit, cidades=cidades, categorias=categorias)
 
 
 def init_app(app):
