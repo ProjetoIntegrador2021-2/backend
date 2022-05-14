@@ -59,8 +59,12 @@ def logout_cliente():
     return "Você saiu da sua conta."
 
 @bp.route("/pagina_cliente")
-@login_required
 def pagina_cliente():
+    q = request.args.get("q")
+    if q:
+        restaurantes = Restaurante.query.filter(Restaurante.nome_restaurante.contains(q))
+    else:
+        restaurantes = Restaurante.query.all()
     cliente=current_user
     restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
     entregador = Entregador.query.filter_by(cliente_id = cliente.id).first()
@@ -75,7 +79,7 @@ def pagina_cliente():
     else:
         entregador_verifica = False
 
-    return render_template("cliente/pagina_cliente.html", restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador)
+    return render_template("cliente/pagina_cliente.html", restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes)
 
 @bp.route("/perfil_cliente")
 @login_required
@@ -100,6 +104,7 @@ def editar_perfil(id):
             return "Não deu certo o update"
     else:
         return render_template("cliente/editar_perfil.html", cliente=edit)
+
 
 def init_app(app):
     app.register_blueprint(bp)

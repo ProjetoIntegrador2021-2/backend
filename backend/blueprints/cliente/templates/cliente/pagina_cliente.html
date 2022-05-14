@@ -10,3 +10,18 @@
     <a href = "/entregador/pagina_entregador/{{entregador.id}}">Acesse página do Entregador</a>
     <hr>
 {% endif %}
+<hr>
+<br><br><br>
+
+<form action="/cliente/pagina_cliente" method="get">
+    <input type="search" name="q" placeholder="Procura...">
+    <input type="submit" value="Procurar">
+</form>
+<hr>
+    {% for restaurante in restaurantes %}
+        <div>
+            <h1>{{restaurante.nome_restaurante}}</h1>
+            <p>Funciona de {{restaurante.funcionamento_inicio}} às {{restaurante.funcionamento_termino}}</p>
+        </div>
+        <hr>
+    {% endfor %}
