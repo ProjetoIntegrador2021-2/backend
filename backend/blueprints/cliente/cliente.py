@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect
 from flask_login import login_user, logout_user, login_required, current_user
 from backend.ext.auth import bcrypt
-from backend.models import Cliente, Restaurante, Entregador
+from backend.models import Cliente, Restaurante, Entregador, Cardapio
 from backend.ext.database import db
 
 
@@ -63,11 +63,15 @@ def pagina_cliente():
     q = request.args.get("q")
     if q:
         restaurantes = Restaurante.query.filter(Restaurante.nome_restaurante.contains(q))
+        cardapios = Cardapio.query.filter(Cardapio.nome_prato.contains(q))
     else:
         restaurantes = Restaurante.query.all()
+        cardapios = Cardapio.query.all()
     cliente=current_user
     restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
     entregador = Entregador.query.filter_by(cliente_id = cliente.id).first()
+    cardapio = Cardapio.query.filter_by(restaurante_id = restaurante.id).first()
+    cardapio_restaurante = Cardapio.query.join(Restaurante.cardapios).all()
 
     if restaurante is not None:
         restaurante_verifica = True
@@ -79,7 +83,7 @@ def pagina_cliente():
     else:
         entregador_verifica = False
 
-    return render_template("cliente/pagina_cliente.html", restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes)
+    return render_template("cliente/pagina_cliente.html", restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes, cardapios=cardapios, cardapio=cardapio, cardapio_restaurante=cardapio_restaurante)
 
 @bp.route("/perfil_cliente")
 @login_required

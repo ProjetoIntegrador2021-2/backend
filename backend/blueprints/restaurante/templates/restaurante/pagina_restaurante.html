@@ -1,4 +1,16 @@
 <h1>{{restaurante.nome_restaurante}}</h1>
 <hr>
 <a href="/restaurante/perfil_restaurante">Acesse seu perfil</a>
+<br><br><br>
+<a href="/restaurante/pagina_restaurante/adicionar_cardapio" style="text-align:right">Adicionar cardápio</a>
+<hr>
+{% for cardapio in cardapios %}
+    <div>
+        <h1>{{cardapio.nome_prato}}</h1>
+        <p>Os ingredientes do prato são {{cardapio.ingredientes}}</p><br>
+        <p>Fica pronto em {{cardapio.tempo_preparo}} horas</p>
+        <h2>Valor: {{cardapio.valor}}</h2>
+    </div>
+    <hr>
+{% endfor %}
 

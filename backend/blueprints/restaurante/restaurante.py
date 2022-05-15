@@ -1,5 +1,5 @@
-from flask import Blueprint, request, redirect, render_template
-from backend.models import Restaurante, Cliente
+from flask import Blueprint, request, redirect, render_template, url_for
+from backend.models import Restaurante, Cliente, Cardapio
 from flask_login import current_user
 from backend.ext.database import db
 
@@ -50,8 +50,12 @@ def cadastro_restaurante():
 
 @bp.route("/pagina_restaurante/<int:id>")
 def pagina_restaurante(id):
+    cliente= current_user
     restaurante = Restaurante.query.get_or_404(id)
-    return render_template("restaurante/pagina_restaurante.html", restaurante=restaurante)
+    restaurantes = Restaurante.query.filter_by(cliente_id = cliente.id).first()
+    cardapios=Cardapio.query.all()
+    cardapio = Cardapio.query.filter_by(restaurante_id = restaurantes.id).first()
+    return render_template("restaurante/pagina_restaurante.html", restaurante=restaurante, cardapio=cardapio, cardapios=cardapios)
 
 @bp.route("/perfil_restaurante/")
 def perfil_restaurante():
@@ -91,6 +95,23 @@ def editar_perfil(id):
     else:
         return render_template("restaurante/editar_perfil.html", restaurante=edit, cidades=cidades, categorias=categorias)
 
+@bp.route("/pagina_restaurante/adicionar_cardapio", methods=["GET","POST"])
+def adicionar_cardapio():
+    cliente = current_user
+    restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
+    if request.method == "POST":
+        novo=Cardapio()
+        novo.nome_prato = request.form["nome_prato"]
+        novo.valor = request.form["valor"]
+        novo.ingredientes = request.form["ingredientes"]
+        novo.tempo_preparo = request.form["tempo_preparo"]
+        novo.restaurante_id = restaurante.id
+
+        db.session.add(novo)
+        db.session.commit()
+        return redirect(url_for('pagina_restaurante'))
+    else:
+        return render_template("restaurante/adicionar_cardapio.html")
 
 def init_app(app):
     app.register_blueprint(bp)
