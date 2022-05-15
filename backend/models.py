@@ -44,3 +44,14 @@ class Restaurante(db.Model):
 
     cliente_id = db.Column(db.Integer, db.ForeignKey("cliente.id"))
 
+    cardapios = db.relationship("Cardapio", backref="restaurante", lazy=True)
+
+class Cardapio(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    nome_prato=db.Column("Nome do prato",db.String(400), nullable=False)
+    valor=db.Column("Valor do prato", db.String(10), nullable=False)
+    ingredientes = db.Column("Ingredientes", db.String(500), nullable=False)
+    tempo_preparo = db.Column("Tempo de preparo", db.String(6), nullable=False)
+
+    restaurante_id = db.Column(db.Integer, db.ForeignKey("restaurante.id"))
+
