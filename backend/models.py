@@ -8,8 +8,6 @@ from flask_login import UserMixin
 def carregaCliente(id):
     return Cliente.query.get(id)
 
-
-
 class Cliente(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column("Nome", db.String(400), nullable=False)
