@@ -158,6 +158,16 @@ def editar_perfil(id):
     else:
         return render_template("cliente/editar_perfil.html", cliente=edit)
 
+@bp.route('/excluirconta/<int:id>', methods = ["POST"])
+@login_required
+def excluirconta (id):
+    excluir = Cliente.query.get_or_404(id)
+    db.session.delete(excluir)
+    db.session.commit()
+
+    return 'Você excluiu sua conta, vamos sentir sua falta.'
+    #return render_template("cliente/editar_perfil.html", delete=excluir)
+
 
 def init_app(app):
     app.register_blueprint(bp)
