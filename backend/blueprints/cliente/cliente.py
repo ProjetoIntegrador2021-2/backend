@@ -11,7 +11,7 @@ bp = Blueprint('cliente', __name__, url_prefix="/cliente", template_folder='temp
 
 @bp.route("/")
 def home():
-    return render_template("cliente/home.html")
+    return render_template("cliente/home-page.html")
 
 
 @bp.route("login_cliente/cadastro_cliente", methods=["GET", "POST"])
@@ -132,7 +132,6 @@ def pagina_cliente():
         entregador_verifica = False
 
     return render_template("cliente/pagina_cliente.html", restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes, cardapios=cardapios, cardapio=cardapio)
-
 
 
 @bp.route("/perfil_cliente")
