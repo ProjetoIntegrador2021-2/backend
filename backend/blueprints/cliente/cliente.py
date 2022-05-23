@@ -134,6 +134,7 @@ def pagina_cliente():
     return render_template("cliente/pagina_cliente.html", restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes, cardapios=cardapios, cardapio=cardapio)
 
 
+
 @bp.route("/perfil_cliente")
 @login_required
 def perfil_cliente():
