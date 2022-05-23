@@ -109,7 +109,7 @@ def adicionar_cardapio():
 
         db.session.add(novo)
         db.session.commit()
-        return redirect(url_for('pagina_restaurante'))
+        return redirect(url_for('pagina_restaurante', id = restaurante.id))
     else:
         return render_template("restaurante/adicionar_cardapio.html")
 
