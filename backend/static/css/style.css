@@ -50,9 +50,10 @@ h4 {
 	justify-content: space-around;
 
 }
-img{
+
+.img_mpedidos{
 	width: 100%;
- 
+
 }
 .ui-card{
 	width: 350px;
@@ -67,7 +68,7 @@ img{
 	transition: all 0.3s ease-out;
 }
 .ui-card:hover img{
-	transform: scale(1.1) translateY(-20px); 
+	transform: scale(1.1) translateY(-20px);
 	opacity: 0.3
 }
 .ui-card .description{
