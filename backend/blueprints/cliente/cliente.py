@@ -32,7 +32,7 @@ def cadastro_cliente():
             db.session.add(novo)
             db.session.commit()
 
-            return redirect(url_for(''))
+            return redirect("/cliente/perfil_cliente")
         else:
             return "Erro na confirmação de senha"
     else:
@@ -72,9 +72,14 @@ def recuperar_senha():
             msg = Message(sender="suporte.flashfood@gmail.com", recipients = [cliente.email])
             msg.html = render_template("cliente/arquivo_email.html", cliente = cliente.id)
             mail.send(msg)
-            return redirect("/cliente/recuperar_senha")
+            return redirect("/cliente/email_sucesso")
     else:
         return render_template("cliente/recuperar_senha.html")
+
+@bp.route("/email_sucesso")
+def email_sucesso():
+    return render_template("cliente/email_sucesso.html")
+
 
 @bp.route("/redefinir_senha/<int:id>", methods=["GET", "POST"])
 def redefinir_senha(id):
