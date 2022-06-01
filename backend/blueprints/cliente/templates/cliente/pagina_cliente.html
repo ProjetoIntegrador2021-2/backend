@@ -12,25 +12,29 @@
 {% endif %}
 <hr>
 <br><br><br>
-
 <form action="/cliente/pagina_cliente" method="get">
     <input type="search" name="q" placeholder="Procura...">
     <input type="submit" value="Procurar">
 </form>
 <hr>
     {% for restaurante in restaurantes %}
-        <div>
-            <h1>{{restaurante.nome_restaurante}}</h1>
-            <p>Funciona de {{restaurante.funcionamento_inicio}} às {{restaurante.funcionamento_termino}}</p>
-        </div>
-        <hr>
+        <a href="/cliente/pagina_restaurante/{{restaurante.id}}">
+            <div>
+                <h1>{{restaurante.nome_restaurante}}</h1>
+                <p>Funciona de {{restaurante.funcionamento_inicio}} às {{restaurante.funcionamento_termino}}</p>
+            </div>
+            <hr>
+        </a>
     {% endfor %}
     {% for cardapio in cardapios %}
-        <div>
-            <h1>{{cardapio.nome_prato}}</h1>
-            <p>{{cardapio.ingredientes}}</p>
-            <p>Tempo de espera: {{cardapio.tempo_preparo}} horas</p>
-            <h2>Valor: {{cardapio.valor}}</h2>
-            <hr>
-        </div>
+        <a href="/cliente/detalhe_cardapio/{{cardapio.id}}">
+            <div>
+                <h1>{{cardapio.nome_prato}}</h1>
+                <p>{{cardapio.ingredientes}}</p>
+                <p>Tempo de espera: {{cardapio.tempo_preparo}} horas</p>
+                <h2>Valor: {{cardapio.valor}}</h2>
+
+                <hr>
+            </div>
+        </a>
     {% endfor %}

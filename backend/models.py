@@ -53,3 +53,11 @@ class Cardapio(db.Model):
 
     restaurante_id = db.Column(db.Integer, db.ForeignKey("restaurante.id"))
 
+class Pedidofeito(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    nome_pedido=db.Column("Nome do pedido",db.String(400), nullable=False)
+    valor_pedido=db.Column("Valor do pedido", db.String(10), nullable=False)
+    endereco=db.Column("Endereço", db.String(200), nullable=True)
+
+    restaurante_id = db.Column(db.Integer, db.ForeignKey("restaurante.id"))
+    cliente_id = db.Column(db.Integer, db.ForeignKey("cliente.id"))
