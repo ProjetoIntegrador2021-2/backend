@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
 from backend.ext.mail import mail
 from backend.ext.auth import bcrypt
-from backend.models import Cliente, Restaurante, Entregador, Cardapio
+from backend.models import Cliente, Restaurante, Entregador, Cardapio, Pedidofeito
 from backend.ext.database import db
 
 
@@ -78,7 +78,7 @@ def recuperar_senha():
 
 @bp.route("/email_sucesso")
 def email_sucesso():
-    return render_template("cliente/email_sucesso.html")
+    return render_template("cliente/email_enviado.html")
 
 
 @bp.route("/redefinir_senha/<int:id>", methods=["GET", "POST"])
@@ -164,15 +164,56 @@ def editar_perfil(id):
     else:
         return render_template("cliente/editar_perfil.html", cliente=edit)
 
+@bp.route("/detalhe_cardapio/<int:id>", methods=["GET", "POST"])
+@login_required
+def detalhe_cardapio(id):
+    pega_id = Cardapio.query.get_or_404(id)
+    restaurante = Restaurante.query.filter_by(id=pega_id.restaurante_id).first()
+    if request.method == "POST":
+        novo = Pedidofeito()
+        novo.nome_pedido = pega_id.nome_prato
+        novo.valor_pedido = pega_id.valor
+        novo.restaurante_id = pega_id.restaurante_id
+        novo.cliente_id = current_user.id
+
+        db.session.add(novo)
+        db.session.commit()
+        return redirect(url_for('cliente.cadastro_endereco', id=novo.id))
+    else:
+        return render_template("cliente/detalhe_cardapio.html", pega_id = pega_id, restaurante=restaurante)
+
 @bp.route('/excluirconta/<int:id>', methods = ["POST"])
 @login_required
-def excluirconta (id):
+def excluirconta(id):
     excluir = Cliente.query.get_or_404(id)
     db.session.delete(excluir)
     db.session.commit()
 
     return 'Você excluiu sua conta, vamos sentir sua falta.'
     #return render_template("cliente/editar_perfil.html", delete=excluir)
+
+@bp.route("/pagina_restaurante/<int:id>")
+def pagina_restaurante(id):
+    restaurante = Restaurante.query.get_or_404(id)
+    cardapio=Cardapio.query.all()
+    cardapios = Cardapio.query.filter_by(restaurante_id = restaurante.id).all()
+    return render_template("cliente/pagina_restaurante.html", restaurante=restaurante, cardapio=cardapio, cardapios=cardapios)
+
+
+@bp.route("/cadastre_endereco/<int:id>", methods=["GET", "POST"])
+@login_required
+def cadastro_endereco(id):
+    adicionar = Pedidofeito.query.get_or_404(id)
+    if request.method == "POST":
+        adicionar.endereco = request.form["endereco"]
+        try:
+            db.session.add(adicionar)
+            db.session.commit()
+            return redirect("/cliente/pagina_cliente")
+        except:
+            return "Não deu certo confirmar endereço"
+    else:
+        return render_template("cliente/cadastro_endereco.html")
 
 
 def init_app(app):

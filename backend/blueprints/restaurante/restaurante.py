@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, render_template, url_for
+from flask import Blueprint, request, redirect, render_template
 from backend.models import Restaurante, Cliente, Cardapio
 from flask_login import current_user
 from backend.ext.database import db
@@ -50,11 +50,10 @@ def cadastro_restaurante():
 
 @bp.route("/pagina_restaurante/<int:id>")
 def pagina_restaurante(id):
-    cliente= current_user
     restaurante = Restaurante.query.get_or_404(id)
-    restaurantes = Restaurante.query.filter_by(cliente_id = cliente.id).first()
-    cardapios=Cardapio.query.all()
-    cardapio = Cardapio.query.filter_by(restaurante_id = restaurantes.id).first()
+    #restaurantes = Restaurante.query.filter_by(cliente_id = current_user.id).first()
+    cardapio=Cardapio.query.all()
+    cardapios = Cardapio.query.filter_by(restaurante_id = restaurante.id).all()
     return render_template("restaurante/pagina_restaurante.html", restaurante=restaurante, cardapio=cardapio, cardapios=cardapios)
 
 @bp.route("/perfil_restaurante/")
@@ -109,7 +108,7 @@ def adicionar_cardapio():
 
         db.session.add(novo)
         db.session.commit()
-        return redirect("/pagina_restaurante/adicionar_cardapio")
+        return redirect("/restaurante/pagina_restaurante/adicionar_cardapio")
     else:
         return render_template("restaurante/adicionar_cardapio.html")
 

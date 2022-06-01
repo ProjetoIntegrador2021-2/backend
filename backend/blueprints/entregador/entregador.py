@@ -9,7 +9,7 @@ bp = Blueprint('entregador', __name__, url_prefix='/entregador', template_folder
 
 @bp.route('/parceria')
 def parceria():
-    return render_template('entregador/parceria.html')
+    return render_template('entregador/cadastro_parceiros.html')
 
 @bp.route('/cadastro_entregador', methods=["GET", "POST"])
 def cadastro_entregador():
