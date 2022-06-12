@@ -17,7 +17,6 @@
     <title>Registrar restaurante</title>
   </head>
   <body>
-    <body>
       <div class="container">
         <div class="row">
           <div class="col-lg-10 col-xl-9 mx-auto">
@@ -26,7 +25,7 @@
             >
 
               <div class="card-body p-4 p-sm-5">
-                <button type="button" class="btn-close" aria-label="Close"></button>
+                <a href="/cliente" type="button" class="btn-close" aria-label="Close"></a>
 
                 <h2 class="card-title text-center mb-5 fs-4 mt-2  fw-bolder">
                   Cadastro
@@ -34,6 +33,19 @@
 
 
                 <form method="post">
+                    <!-- Adicionar Email -->
+                    <div class="form-floating mt-4 mb-3 mx-5">
+                    <input
+                      name="email"
+                      type="text"
+                      class="form-control"
+                      id="floatingInputUsername"
+                      placeholder="Email"
+                      required
+                      autofocus
+                    />
+                    <label class="txtbox" for="floatingInputUsername">Email</label>
+                  </div>
                   <!-- Adicionar nome do restaurante -->
                   <h4 class="mt-5 fs-6 container text-center ">
                     Dados do restaurante
@@ -56,7 +68,7 @@
                  <!-- Adicionar CNPJ -->
                  <div class="form-floating mb-4  mx-5">
                   <input
-                    name="cnpj_restaurante"
+                    name="cnpj"
                     type="number"
                     class="form-control"
                     id="floatingnumber"
@@ -70,17 +82,19 @@
                     Selecione sua região
                   </h4>
                 <div class="form-floating mb-4  mx-5">
-                <select class="form-select m-auto" aria-label="Default select example">
-                 <option value="1">Aracati</option>
-                 <option value="2">Fortin</option>
-                 <option value="3">Icapuí</option>
+                <select name="cidade" class="form-select m-auto" aria-label="Default select example">
+                    {% for cidade in cidades %}
+                        <option value="{{cidade}}">
+                            {{cidades[cidade]}}
+                        </option>
+                    {% endfor %}
                 </select>
                 </div>
 
                  <!-- Adicionar endereço -->
                   <div class="form-floating mb-3  mx-5">
                     <input
-                      name="endereco_restaurante"
+                      name="endereco"
                       type="text"
                       class="form-control"
                       id="floatingInputUsername"
@@ -98,7 +112,7 @@
                 </h4>
                  <div class="form-floating mt-4  mb-3  mx-5">
                   <input
-                    name="horario1_restaurante"
+                    name="funcionamento_inicio"
                     type="time"
                     class="form-control"
                     id="floatingnumber"
@@ -109,7 +123,7 @@
 
                 <div class="form-floating mb-4  mx-5">
                   <input
-                    name="horario2_restaurante"
+                    name="funcionamento_termino"
                     type="time"
                     class="form-control"
                     id="floatingnumber"
@@ -121,10 +135,18 @@
                    <!-- Adicionar Categoria -->
 
                    <h4 class=" fs-6 container text-center" >
-                    Categorias
+                    Categoria
                   </h4>
-
-                  <div class="alert text-center mx-4" role="alert">
+                    <div class="form-floating mb-4  mx-5">
+                <select name="categoria" class="form-select m-auto" aria-label="Default select example">
+                    {% for categoria in categorias %}
+                        <option value="{{categoria}}">
+                            {{categorias[categoria]}}
+                        </option>
+                    {% endfor %}
+                </select>
+                </div>
+                  <!-- <div class="alert text-center mx-4" role="alert">
                     <div class="form-check form-check-inline ">
                       <input class="form-check-input" name="japonesa" type="checkbox" id="inlineCheckbox1" value="option1">
                       <label class="form-check-label" for="inlineCheckbox1">Japonesa</label>
@@ -154,7 +176,7 @@
                       <input class="form-check-input" name="pizzas" type="checkbox" id="inlineCheckbox3" value="option6">
                       <label class="form-check-label" for="inlineCheckbox6">Pizzas</label>
                     </div>
-                  </div>
+                  </div> -->
 
 
                   <!-- Botão de cadastrar Restaurante -->
@@ -167,7 +189,7 @@
                     </button>
                   </div>
 
-                  <a class="d-block text-center mt-3 small" href="#"
+                  <a class="d-block text-center mt-3 small" href="/cliente/login_cliente"
                   >Já sou usuário</a
                 >
 
@@ -181,7 +203,6 @@
           </div>
         </div>
       </div>
-    </body>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
