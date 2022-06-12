@@ -1,5 +1,6 @@
 <h1>Edite seu perfil</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
+    Imagem:<input type="file" name="imagem_perfil"><br>
    Nome:<input type="text" name="nome" value="{{cliente.nome}}"><br>
     Endereço:<input type="text" name="endereco" value="{{cliente.endereco}}"><br>
     CPF:<input type="text" name="cpf" value="{{cliente.cpf}}"><br>

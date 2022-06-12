@@ -12,6 +12,7 @@ class Cliente(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column("Nome", db.String(400), nullable=False)
     email = db.Column("Email", db.String(100), unique=True, nullable=False)
+    imagem_perfil = db.Column(db.String(100), nullable=True)
     senha = db.Column("Senha", db.String(100), nullable=False)
     cpf = db.Column("CPF", db.String(11))
     telefone = db.Column("Telefone", db.String(11))
@@ -36,6 +37,7 @@ class Restaurante(db.Model):
     endereco = db.Column('Endereço', db.String(200), nullable=False)
     cidade = db.Column('Cidade ', db.String(100))
     categoria = db.Column('Categorias', db.String(100))
+    imagem_perfil = db.Column(db.String(100), nullable=True)
     cnpj = db.Column('CNPJ', db.String(14), unique = True, nullable=False)
     funcionamento_inicio = db.Column('Abre:', db.String(6), nullable=False)
     funcionamento_termino = db.Column('Fecha:', db.String(6), nullable=False)
@@ -48,6 +50,7 @@ class Cardapio(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     nome_prato=db.Column("Nome do prato",db.String(400), nullable=False)
     valor=db.Column("Valor do prato", db.String(10), nullable=False)
+    imagem_prato = db.Column(db.String(100), nullable=True)
     ingredientes = db.Column("Ingredientes", db.String(500), nullable=False)
     tempo_preparo = db.Column("Tempo de preparo", db.String(6), nullable=False)
 

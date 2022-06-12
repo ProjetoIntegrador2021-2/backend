@@ -11,16 +11,18 @@ bp = Blueprint('restaurante', __name__, url_prefix='/restaurante', template_fold
 def cadastro_restaurante():
     cidades = {
         "-------": "--------",
-        "Aracati": "ARACATI",
-        "Fortim": "FORTIM",
-        "Icapuí": "ICAPUÍ",
+        "Aracati": "Aracati",
+        "Fortim": "Fortim",
+        "Icapuí": "Icapuí",
         }
-
     categorias = {
-        "-------":"-------",
-        "pizza": "PIZZA",
-        "doces":"DOCES",
-        "hamburguer":"HAMBURGUER",
+        "-------": "--------",
+        "Japonesa": "Japonesa",
+        "Bebidas": "Bebidas",
+        "Lanches": "Lanches",
+        "Carnes": "Carnes",
+        "Doces": "Doces",
+        "Pizzas": "Pizzas",
         }
     if request.method == "POST":
         email= request.form["email"]
@@ -28,7 +30,7 @@ def cadastro_restaurante():
         cliente= Cliente.query.filter_by(email=email).first()
 
         if not cliente:
-           return "Você não é cadastrado como cliente"
+           return redirect("/cliente/login_cliente/cadastro_cliente")
         else:
             novo = Restaurante()
             novo.nome_restaurante = request.form["nome_restaurante"]

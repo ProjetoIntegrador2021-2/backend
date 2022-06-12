@@ -1,13 +1,22 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+import os
+from backend.app import create_app
+from flask import Blueprint, request, render_template, redirect, url_for, flash, send_from_directory
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
 from backend.ext.mail import mail
 from backend.ext.auth import bcrypt
 from backend.models import Cliente, Restaurante, Entregador, Cardapio, Pedidofeito
 from backend.ext.database import db
-
+import mercadopago
+from werkzeug.utils import secure_filename
 
 bp = Blueprint('cliente', __name__, url_prefix="/cliente", template_folder='templates')
+
+ALLOWED_EXTENSIONS = {'png', 'jpeg', 'jpg'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route("/")
 def home():
@@ -32,7 +41,7 @@ def cadastro_cliente():
             db.session.add(novo)
             db.session.commit()
 
-            return redirect("/cliente/perfil_cliente")
+            return redirect(url_for('cliente.pagina_cliente', id=novo.id))
         else:
             return "Erro na confirmação de senha"
     else:
@@ -52,7 +61,7 @@ def login_cliente():
 
         if bcrypt.check_password_hash(cliente.senha, senha):
             login_user(cliente)
-            return redirect("/cliente/pagina_cliente")
+            return redirect(url_for('cliente.pagina_cliente', id=cliente.id))
         else:
             return "Senha incorreta"
     else:
@@ -110,12 +119,13 @@ def logout_cliente():
     return "Você saiu da sua conta."
 
 
-@bp.route("/pagina_cliente")
+@bp.route("/pagina_cliente/<int:id>")
 @login_required
-def pagina_cliente():
-    cliente=current_user
+def pagina_cliente(id):
+    cliente=Cliente.query.get_or_404(id)
     restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
     entregador = Entregador.query.filter_by(cliente_id = cliente.id).first()
+    restaurante_cardapio = Cardapio.query.join(Restaurante.cardapios).all()
     cardapio = Cardapio.query.all()
 
     q = request.args.get("q")
@@ -136,7 +146,37 @@ def pagina_cliente():
     else:
         entregador_verifica = False
 
-    return render_template("cliente/pagina_cliente.html", restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes, cardapios=cardapios, cardapio=cardapio)
+    return render_template("cliente/cliente-page.html", restaurante_cardapio=restaurante_cardapio, q=q,  restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes, cardapios=cardapios, cardapio=cardapio)
+
+@bp.route("/upload/<int:id>/<path:filename>")
+@login_required
+def upload(id,filename):
+    app = create_app()
+    return send_from_directory(app.config['UPLOAD_FOLDER'], id, filename)
+
+
+@bp.route("/salvar_pedido/<int:id>", methods=["GET", "POST"])
+@login_required
+def salvar_pedido(id):
+    cardapio = Cardapio.query.get_or_404(id)
+    if request.method == "POST":
+        novo = Pedidofeito()
+        novo.nome_pedido = cardapio.nome_prato
+        novo.valor_pedido = cardapio.valor
+        novo.restaurante_id = cardapio.restaurante_id
+        novo.cliente_id = current_user.id
+
+        db.session.add(novo)
+        db.session.commit()
+        return redirect(url_for('cliente.cadastro_endereco', id=novo.id))
+    else:
+        return "NÃO DEU CERTO"
+        '''
+        session['nome_prato'] = cardapio.nome_prato
+        session['valor'] = cardapio.valor
+        session['cliente_id'] = current_user.id
+        session['restaurante_id'] = cardapio.restaurante_id
+        '''
 
 
 @bp.route("/perfil_cliente")
@@ -151,14 +191,31 @@ def perfil_cliente():
 def editar_perfil(id):
     edit = Cliente.query.get_or_404(id)
     if request.method == "POST":
+        if 'imagem_perfil' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        imagem_perfil = request.files["imagem_perfil"]
         edit.nome = request.form["nome"]
         edit.endereco = request.form["endereco"]
         edit.cpf = request.form["cpf"]
         edit.telefone = request.form["telefone"]
         try:
-            db.session.add(edit)
-            db.session.commit()
-            return redirect("/cliente/perfil_cliente")
+
+            if imagem_perfil.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+
+            if imagem_perfil and allowed_file(imagem_perfil.filename):
+                filename = secure_filename(imagem_perfil.filename)
+                app = create_app()
+                imagem_perfil.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                edit.imagem_perfil = filename
+
+                db.session.add(edit)
+                db.session.commit()
+
+                return redirect("/cliente/perfil_cliente")
         except:
             return "Não deu certo o update"
     else:
@@ -180,7 +237,8 @@ def detalhe_cardapio(id):
         db.session.commit()
         return redirect(url_for('cliente.cadastro_endereco', id=novo.id))
     else:
-        return render_template("cliente/detalhe_cardapio.html", pega_id = pega_id, restaurante=restaurante)
+        return render_template("cliente/pagina_cliente.html", pega_id=pega_id, restaurante=restaurante)
+
 
 @bp.route('/excluirconta/<int:id>', methods = ["POST"])
 @login_required
@@ -209,12 +267,71 @@ def cadastro_endereco(id):
         try:
             db.session.add(adicionar)
             db.session.commit()
-            return redirect("/cliente/pagina_cliente")
+            return redirect(url_for('cliente.pagina_pagamento', id=current_user.id))
         except:
             return "Não deu certo confirmar endereço"
     else:
         return render_template("cliente/cadastro_endereco.html")
 
+@bp.route("/pagina_pagamento/<int:id>", methods=["GET", "POST"])
+@login_required
+def pagina_pagamento(id):
+    cliente_pagar = Cliente.query.get_or_404(id)
+    if request.method == "POST":
+        sdk = mercadopago.SDK("ACCESS_TOKEN")
+
+        payment_data = {
+            "transaction_amount": float(request.form.get("transaction_amount")),
+            "token": request.form.get("token"),
+            "description": request.form.get("description"),
+            "installments": int(request.form.get("installments")),
+            "payment_method_id": request.form.get("payment_method_id"),
+            "payer": {
+                "email": request.form.get("cardholderEmail"),
+                "identification": {
+                    "type": request.form.get("identificationType"),
+                    "number": request.form.get("identificationNumber")
+                }
+                #"first_name": request.form.get("cardholderName")
+            }
+        }
+
+        payment_response = sdk.payment().create(payment_data)
+        payment = payment_response["response"]
+
+        print(payment)
+        '''
+        sdk = mercadopago.SDK("ACCESS_TOKEN")
+
+        payment_data = {
+            "transaction_amount": float(request.POST.get("transaction_amount")),
+            "token": request.POST.get("token"),
+            "description": request.POST.get("description"),
+            "installments": int(request.POST.get("installments")),
+            "payment_method_id": request.POST.get("payment_method_id"),
+            "payer": {
+                "email": request.POST.get("cardholderEmail"),
+                "identification": {
+                    "type": request.POST.get("identificationType"),
+                    "number": request.POST.get("identificationNumber")
+                }
+                "first_name": request.POST.get("cardholderName")
+            }
+        }
+
+        payment_response = sdk.payment().create(payment_data)
+        payment = payment_response["response"]
+
+        print(payment)
+        '''
+    return render_template("cliente/pagina_pagamento.html", cliente_pagar=cliente_pagar)
+
+@bp.route("/categoria")
+@login_required
+def categoria():
+    restaurante = Restaurante.query.all()
+    restaurantes = Restaurante.query.filter(Restaurante.categoria.contains("Lanches"))
+    return render_template("cliente/categorias.html", restaurante=restaurante, restaurantes=restaurantes)
 
 def init_app(app):
     app.register_blueprint(bp)

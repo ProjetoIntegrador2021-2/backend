@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 * {
   font-family: "Poppins", sans-serif;
 }
@@ -12,12 +11,67 @@ h4 {
   font-size: 20%;
 }
 
+#bannerimage {
+	width: 100%;
+	background-image: url('https://www.milium.com.br/wp-content/uploads/2020/05/Banner-Blog-Post-Milium-Mai20-07.jpg');
+	height: 16rem;
+	background-color:  #8a8a8a;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+  }
+
+.form{
+
+    position: relative;
+}
+
+.form .fa-search{
+
+    position: absolute;
+    top:20px;
+    left: 20px;
+    color: #9ca3af;
+
+}
+
+
+
+.left-pan{
+    padding-left: 7px;
+}
+
+.left-pan i{
+
+   padding-left: 10px;
+}
+
+.form-input{
+
+    height: 55px;
+    text-indent: 33px;
+    border-radius: 10px;
+}
+
+.form-input:focus{
+
+    box-shadow: none;
+    border:none;
+}
+
+.btnperfil {
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+  }
+
+
 .btn-danger{
 	background-color: #ea4335;
 }
 
 .categorias{
-	margin-top: 220px;
+	margin-top: 170px;
 }
 
 .category {
@@ -35,6 +89,17 @@ h4 {
 .card:hover {
   top: 4px;
 }
+
+.card3 {
+	position: relative;
+	top: 0;
+	padding: 10px 10px 10px 10px ;
+	transition: all 0.2s ease-in-out;
+
+  }
+  .card3:hover {
+	top: 4px;
+  }
 
 *,*:after,*:before{
 	-webkit-box-sizing: border-box;
@@ -92,8 +157,8 @@ h4 {
 .ui-card .description p{
 	transform: translateY(30px);
 	opacity: 0;
-  font-size: 15px;
-  margin: 0 0 20px;
+  	font-size: 15px;
+ 	margin: 0 0 20px;
 
 	transition: all 0.3s ease-out 0.2s;
 }
@@ -124,3 +189,22 @@ h4 {
 	transform: translateY(0px);
 }
 
+
+
+.form-inputs{
+    position:relative;
+}
+.form-inputs .form-control{
+    height:45px;
+}
+
+.form-inputs .form-control:focus{
+    box-shadow:none;
+    border:1px solid #000;
+}
+
+.form-inputs i{
+    position:absolute;
+    right:10px;
+    top:15px;
+}
