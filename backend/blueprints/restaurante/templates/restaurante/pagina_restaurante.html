@@ -9,7 +9,10 @@
         <h1>{{cardapio.nome_prato}}</h1>
         <p>Os ingredientes do prato são {{cardapio.ingredientes}}</p><br>
         <p>Fica pronto em {{cardapio.tempo_preparo}} horas</p>
-        <h2>Valor: {{cardapio.valor}}</h2>
+        <h2>Valor: {{cardapio.valor}}</h2><br><br>
+        <form action="{{url_for('restaurante.excluircardapio', id=cardapio.id)}}" method="post">
+            <input type="submit" value="Apagar">
+        </form>
     </div>
     <hr>
 {% endfor %}

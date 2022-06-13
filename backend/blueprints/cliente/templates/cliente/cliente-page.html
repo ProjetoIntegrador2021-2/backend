@@ -117,7 +117,7 @@
                   <div class="col-12 mx-2 ">
                     <div class="owl-carousel owl-theme">
                       <div class="item mb-4" style="width: 7em;">
-                        <a  style=" text-decoration: none;" href="/templates/categorias.html">
+                        <a  style=" text-decoration: none;" href="/cliente/categoria">
                         <div class="card border-0 shadow ">
                           <img src="..." alt="" class="" />
                           <div class="card-body rounded-3 py-2 px-3" style="background-color:#ffffff;">
@@ -228,9 +228,9 @@
 
 
                                       </div>
-                                      <!-- <div class="mt-1 mb-1">
-                                        <span class="spec-1">{{restaurante.categoria}}</span>
-                                      </div> -->
+                                      <div class="mt-1 mb-1">
+                                        <span class="spec-1">{{cardapio.restaurante_categoria}}</span>
+                                      </div>
                                       <p class="text-justify  para mb-0">{{cardapio.ingredientes}}<br><br></p>
                                   </div>
                                   <div class="align-items-end align-content-end text-center col-md-3 border-left mt-1">
@@ -254,7 +254,7 @@
                           </div>
                           <div class="modal-body">
                             <p class="mt-3 mx-4 fw-bold fs-4">{{cardapio.nome_prato}}</p>
-                            <h6 class="mx-4 text-black mt-2" style="font-weight: 600;">{{restaurante_cardapio.nome_restaurante}}</h6>
+                            <h6 class="mx-4 text-black mt-2" style="font-weight: 600;">{{cardapio.restaurante_adicionou}}</h6>
                             <p class="mx-4 mt-3 text-justify">{{cardapio.ingredientes}}</p>
                             <p class="mx-4 mt-3 text-justify" style="color: rgb(0, 202, 34);">Apartir de R${{cardapio.valor}}</p>
                             <p class="fw-light text-justify mx-4 mt-3 ">{{cardapio.tempo_preparo}} horas - entrega R$2,00</p>
@@ -293,6 +293,29 @@
 
                     <!-- final card1 -->
                {% endfor %}
+               {% for restaurante in restaurantes %}
+                    <div class="col-md-6 col-xl-3 mt-3">
+                <a style="text-decoration: none; list-style: none;" href="/cliente/pagina_restaurante/{{restaurante.id}}">
+                <div class="card2 order-card">
+                  <div class="card-block text-center">
+                    <img class="restauranteimg my-3" src="https://files.menudino.com/cardapios/32096/logo.png">
+                    <h5 class="text-center fw-bold " style="color:black;">{{restaurante.nome_restaurante}}</h5>
+                    <p class="text-center">
+                      <span class="" style="font-size: 0.8rem; color: #ffbb00;">5.0
+                        <span class="fa fa-star"> </span>
+                      </span>
+                      <span class="text-center fw-light mt-3" style="font-size: 0.8rem; color: #444444;">
+                        {{restaurante.categoria}}
+                      </span>
+                    </p>
+                    <p class="text-center fw-light " style="font-size: 0.8rem; color: #818181;">
+                       entrega R$2,00
+                    </p>
+                  </div>
+                    </div>
+                  </a>
+                </div>
+               {% endfor%}
             {% endif %}
             {% if q == None %}
 

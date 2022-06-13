@@ -125,7 +125,6 @@ def pagina_cliente(id):
     cliente=Cliente.query.get_or_404(id)
     restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
     entregador = Entregador.query.filter_by(cliente_id = cliente.id).first()
-    restaurante_cardapio = Cardapio.query.join(Restaurante.cardapios).all()
     cardapio = Cardapio.query.all()
 
     q = request.args.get("q")
@@ -146,7 +145,14 @@ def pagina_cliente(id):
     else:
         entregador_verifica = False
 
-    return render_template("cliente/cliente-page.html", restaurante_cardapio=restaurante_cardapio, q=q,  restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes, cardapios=cardapios, cardapio=cardapio)
+    return render_template("cliente/cliente-page.html", q=q,  restaurante_v=restaurante_verifica, entregador_v=entregador_verifica, restaurante=restaurante, entregador=entregador, restaurantes=restaurantes, cardapios=cardapios, cardapio=cardapio)
+
+@bp.route("/pega_nome/<int:id>")
+def pega_nome(id):
+    pega_id = Cardapio.query.get_or_404(id)
+    restaurante = Restaurante.query.filter_by(id=pega_id.restaurante_id).first()
+    return send_from_directory(restaurante=restaurante)
+
 
 @bp.route("/upload/<int:id>/<path:filename>")
 @login_required

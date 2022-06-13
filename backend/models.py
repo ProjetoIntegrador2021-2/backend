@@ -53,6 +53,8 @@ class Cardapio(db.Model):
     imagem_prato = db.Column(db.String(100), nullable=True)
     ingredientes = db.Column("Ingredientes", db.String(500), nullable=False)
     tempo_preparo = db.Column("Tempo de preparo", db.String(6), nullable=False)
+    restaurante_adicionou = db.Column("Restaurante_adicionou", db.String(400), nullable=True)
+    restaurante_categoria = db.Column('Categorias', db.String(100), nullable=True)
 
     restaurante_id = db.Column(db.Integer, db.ForeignKey("restaurante.id"))
 

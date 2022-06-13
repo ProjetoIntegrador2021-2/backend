@@ -1,6 +1,6 @@
-from flask import Blueprint, request, redirect, render_template
+from flask import Blueprint, request, redirect, render_template, url_for
 from backend.models import Restaurante, Cliente, Cardapio
-from flask_login import current_user
+from flask_login import current_user, login_required
 from backend.ext.database import db
 
 
@@ -58,6 +58,16 @@ def pagina_restaurante(id):
     cardapios = Cardapio.query.filter_by(restaurante_id = restaurante.id).all()
     return render_template("restaurante/pagina_restaurante.html", restaurante=restaurante, cardapio=cardapio, cardapios=cardapios)
 
+
+@bp.route('/excluircardapio/<int:id>', methods = ["POST"])
+def excluircardapio(id):
+    excluir = Cardapio.query.get_or_404(id)
+    db.session.delete(excluir)
+    db.session.commit()
+
+
+    return "Apagou cardapio"
+
 @bp.route("/perfil_restaurante/")
 def perfil_restaurante():
     cliente = current_user
@@ -97,6 +107,7 @@ def editar_perfil(id):
         return render_template("restaurante/editar_perfil.html", restaurante=edit, cidades=cidades, categorias=categorias)
 
 @bp.route("/pagina_restaurante/adicionar_cardapio", methods=["GET","POST"])
+@login_required
 def adicionar_cardapio():
     cliente = current_user
     restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
@@ -107,6 +118,8 @@ def adicionar_cardapio():
         novo.ingredientes = request.form["ingredientes"]
         novo.tempo_preparo = request.form["tempo_preparo"]
         novo.restaurante_id = restaurante.id
+        novo.restaurante_adicionou = restaurante.nome_restaurante
+        novo.restaurante_categoria = restaurante.categoria
 
         db.session.add(novo)
         db.session.commit()
