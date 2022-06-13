@@ -1,7 +1,11 @@
 <h1>Cadastre endereço de destino!</h1>
 
 <form method="post">
-    <input type="text" name="endereco" placeholder="Endereço">
+    {% if current_user.endereco != None %}
+        <input type="text" name="endereco" value="{{current_user.endereco}}">
+    {% else %}
+        <input type="text" name="endereco" placeholder="Endereço">
+    {% endif %}
     <br>
     <input type="submit" value="Confirmar">
 </form>
