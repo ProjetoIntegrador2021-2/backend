@@ -24,50 +24,12 @@
     <title>FlashFood</title>
   </head>
   <body>
-    <nav
-      class="navbar shadow-sm fixed-top navbar-expand-lg navbar-light p-3"
-      style="background-color: #F7F8F9;"
-    >
-      <div class="container-fluid ">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarTogglerDemo03"
-          aria-controls="navbarTogglerDemo03"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <a class="navbar-brand d-flex align-items-center" style="margin-left: 8%;" href="#">
-          <img  src="../static/img/logo.png" alt="logo" width="80" height="80" class="">
-          </a>
-
-        <div
-          class="collapse navbar-collapse justify-content-end m-1"
-          id="navbarTogglerDemo03"
-        >
-          <a
-            class="navbar-brand "
-            style="margin-right: 5%; font-size: 18px; color: #ea4335;"
-            href=""
-            >Trabalhe conosco</a
-          >
-          <form class="d-flex " style="margin-right: 5%;">
-            <a class="btnperfil mt-2 mb-2" href="#"><i class="ion-ios-arrow-down"></i></a>
-
-          </form>
-        </div>
-      </div>
-    </nav>
 
         <!-- categorias -->
 
-
-      <div class="container mb-5 categorias">
-        <nav aria-label="Page navigation example" >
+        <div class="fixed-top pt-4 px-4">
+        <div aria-label="Page navigation example " >
           <ul class="pagination">
             <li class="page-item" >
               <a   style="background-color: #F7F8F9; " class="page-link" href="{{url_for('cliente.pagina_cliente', id=current_user.id)}}" aria-label="Previous">
@@ -78,13 +40,16 @@
               Lanches
             </h3>
           </ul>
-        </nav>
+        </div>
+    </div>
+
+      <div class="container mb-5 categorias">
 
 
 
 
           <!-- Lanches -->
-    <div class="container mt-5">
+    <div class="container mt-2">
     <div class="row ">
       {% for restaurante in restaurantes %}
           <div class="col-md-6 col-xl-3 mt-3">
@@ -101,9 +66,9 @@
                     {{restaurante.categoria}}
                   </span>
                 </p>
-                <p class="text-center fw-light " style="font-size: 0.8rem; color: #818181;">
-                   entrega R$2,00
-                </p>
+              <p class="text-center fw-light " style="font-size: 0.8rem; color: #818181;">
+                 30-40 min - entrega R$1,00
+              </p>
               </div>
                 </div>
               </a>

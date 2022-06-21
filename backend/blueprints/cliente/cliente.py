@@ -1,6 +1,6 @@
 import os
 from backend.app import create_app
-from flask import Blueprint, request, render_template, redirect, url_for, flash, send_from_directory
+from flask import Blueprint, request, render_template, redirect, url_for, flash, send_from_directory, session
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
 from backend.ext.mail import mail
@@ -41,7 +41,7 @@ def cadastro_cliente():
             db.session.add(novo)
             db.session.commit()
 
-            return redirect(url_for('cliente.pagina_cliente', id=novo.id))
+            return redirect("/cliente/login_cliente")
         else:
             return "Erro na confirmação de senha"
     else:
@@ -112,11 +112,13 @@ def redefinir_senha(id):
         return render_template("cliente/redefinir_senha.html")
 
 
-@bp.route("/logout_cliente")
+@bp.route("/logout_cliente", methods=["GET","POST"])
 @login_required
 def logout_cliente():
-    logout_user()
-    return "Você saiu da sua conta."
+    if request.method == "POST":
+        logout_user()
+
+        return redirect("/cliente")
 
 
 @bp.route("/pagina_cliente/<int:id>")
@@ -165,6 +167,8 @@ def upload(id,filename):
 @login_required
 def salvar_pedido(id):
     cardapio = Cardapio.query.get_or_404(id)
+    session['pedido'] = float(cardapio.valor.replace(",", ".")) * int(request.form["quantidade"]) + 2
+    session['description'] = f'{cardapio.nome_prato} x {request.form["quantidade"]}'
     if request.method == "POST":
         novo = Pedidofeito()
         novo.nome_pedido = cardapio.nome_prato
@@ -231,6 +235,7 @@ def editar_perfil(id):
 @login_required
 def detalhe_cardapio(id):
     pega_id = Cardapio.query.get_or_404(id)
+    session['pedido'] = pega_id
     restaurante = Restaurante.query.filter_by(id=pega_id.restaurante_id).first()
     if request.method == "POST":
         novo = Pedidofeito()
@@ -261,7 +266,15 @@ def pagina_restaurante(id):
     restaurante = Restaurante.query.get_or_404(id)
     cardapio=Cardapio.query.all()
     cardapios = Cardapio.query.filter_by(restaurante_id = restaurante.id).all()
-    return render_template("cliente/pagina_restaurante.html", restaurante=restaurante, cardapio=cardapio, cardapios=cardapios)
+
+    q = request.args.get("q")
+
+    if q:
+        cardapios_get = Cardapio.query.filter_by(restaurante_id=restaurante.id).filter(Cardapio.nome_prato.contains(q))
+    else:
+        cardapios_get = cardapios
+
+    return render_template("cliente/pagina-restaurante.html", restaurante=restaurante, cardapio=cardapio, cardapios=cardapios_get)
 
 
 @bp.route("/cadastre_endereco/<int:id>", methods=["GET", "POST"])
@@ -270,6 +283,7 @@ def cadastro_endereco(id):
     adicionar = Pedidofeito.query.get_or_404(id)
     if request.method == "POST":
         adicionar.endereco = request.form["endereco"]
+        adicionar.cliente_pediu = current_user.nome
         try:
             db.session.add(adicionar)
             db.session.commit()
@@ -283,54 +297,44 @@ def cadastro_endereco(id):
 @login_required
 def pagina_pagamento(id):
     cliente_pagar = Cliente.query.get_or_404(id)
+
+    banco_emissor = [
+        "Mastercard", "Visa", "American Express",
+        ]
+
+    documento = [
+        "CPF", "RG",
+        ]
+
+    parcela = [
+        "1x", "2x",
+        ]
     if request.method == "POST":
-        sdk = mercadopago.SDK("ACCESS_TOKEN")
+        sdk = mercadopago.SDK("TEST-2722201582418152-061511-781d1859bffe7a2bcd68fd6765a420ca-1142330935")
 
         payment_data = {
-            "transaction_amount": float(request.form.get("transaction_amount")),
-            "token": request.form.get("token"),
-            "description": request.form.get("description"),
-            "installments": int(request.form.get("installments")),
-            "payment_method_id": request.form.get("payment_method_id"),
+            "transaction_amount":float(request.get_json()["transaction_amount"]),
+            "token": request.get_json()["token"],
+            "description": request.get_json()["description"],
+            "installments": int(request.get_json()["installments"]),
+            "payment_method_id": request.get_json()["payment_method_id"],
             "payer": {
-                "email": request.form.get("cardholderEmail"),
+                "email": request.get_json()["payer"]["email"],
                 "identification": {
-                    "type": request.form.get("identificationType"),
-                    "number": request.form.get("identificationNumber")
+                    "type": request.get_json()["payer"]["identification"]["type"],
+                    "number": request.get_json()["payer"]["identification"]["number"]
                 }
-                #"first_name": request.form.get("cardholderName")
             }
         }
 
         payment_response = sdk.payment().create(payment_data)
         payment = payment_response["response"]
-
         print(payment)
-        '''
-        sdk = mercadopago.SDK("ACCESS_TOKEN")
 
-        payment_data = {
-            "transaction_amount": float(request.POST.get("transaction_amount")),
-            "token": request.POST.get("token"),
-            "description": request.POST.get("description"),
-            "installments": int(request.POST.get("installments")),
-            "payment_method_id": request.POST.get("payment_method_id"),
-            "payer": {
-                "email": request.POST.get("cardholderEmail"),
-                "identification": {
-                    "type": request.POST.get("identificationType"),
-                    "number": request.POST.get("identificationNumber")
-                }
-                "first_name": request.POST.get("cardholderName")
-            }
-        }
-
-        payment_response = sdk.payment().create(payment_data)
-        payment = payment_response["response"]
-
-        print(payment)
-        '''
-    return render_template("cliente/pagina_pagamento.html", cliente_pagar=cliente_pagar)
+        return payment
+        #return redirect(url_for('cliente.pagina_cliente', id=cliente_pagar.id))
+    else:
+        return render_template("cliente/pagina_pagamento.html", cliente_pagar=cliente_pagar, banco_emissores=banco_emissor, documentos=documento, parcelas=parcela)
 
 @bp.route("/categoria")
 @login_required
