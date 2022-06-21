@@ -63,6 +63,7 @@ class Pedidofeito(db.Model):
     nome_pedido=db.Column("Nome do pedido",db.String(400), nullable=False)
     valor_pedido=db.Column("Valor do pedido", db.String(10), nullable=False)
     endereco=db.Column("Endereço", db.String(200), nullable=True)
+    cliente_pediu = db.Column("Nome do cliente", db.String(400), nullable=True)
 
     restaurante_id = db.Column(db.Integer, db.ForeignKey("restaurante.id"))
     cliente_id = db.Column(db.Integer, db.ForeignKey("cliente.id"))

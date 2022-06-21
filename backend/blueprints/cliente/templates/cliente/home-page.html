@@ -24,7 +24,7 @@
   </head>
   <body>
     <nav
-      class="navbar shadow-sm fixed-top navbar-expand-lg navbar-light p-0"
+      class="navbar shadow-sm fixed-top  navbar-expand-lg navbar-light p-3"
       style="background-color: #F7F8F9;"
     >
       <div class="container-fluid ">
@@ -40,30 +40,39 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <a class="navbar-brand d-flex align-items-center" style="margin-left: 5%;" href="#">
-            <img src="../static/img/logo.png" alt="logo" width="130" height="130" class="">
-          </a>
+        <a class="navbar-brand d-flex align-items-center" style="margin-left: 8%;" href="#">
+          <img  src="../../static/img/logo.png" alt="logo" width="100" height="100" class="">
+        </a>
 
         <div
           class="collapse navbar-collapse justify-content-end m-1"
-          id="navbarTogglerDemo03"
-        >
-          <a
-            class="navbar-brand "
-            name="Trabalhe_conosco"
-            style="margin-right: 5%; font-size: 18px; color: #ea4335;"
-            href="/entregador/parceria"
-            >Trabalhe conosco</a
-          >
-          <div class="d-flex " style="margin-right: 5%;">
-            <a id="botao"
-              class="btn btn-danger fw-bolder "
-              style="width: 100px; right: 50px; text-decoration: none; color: black;"
-              href="/cliente/login_cliente"
-              >
-              <span  style=" color: #F7F8F9; font-weight: 600;"> Entrar </span>
-            </a>
+          id="navbarTogglerDemo03" >
+
+
+          <!-- Example single danger button -->
+          <div class="d-flex " style="margin-right: 8%;">
+          <div class="justify-content-end" id="navbarNavDarkDropdown">
+            <ul class="navbar-nav d-flex">
+              <li class="nav-item dropdown">
+                <a style="color: #ea4335;" class="nav-link dropdown-toggle fs-6" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Trabalhe conosco
+                </a>
+                <ul class="dropdown-menu dropdown-menu-ligth" aria-labelledby="navbarDarkDropdownMenuLink">
+                  <li><a class="dropdown-item" href="/restaurante/cadastro_restaurante">Restaurante</a></li>
+                  <li><a class="dropdown-item disabled" href="#">Entregador</a></li>
+                </ul>
+              </li>
+            </ul>
           </div>
+          </div>
+
+        <div class="d-flex " style="margin-right: 5%;">
+        <a id="botao" class="btn btn-danger fw-bolder" style="width: 100px; right: 50px; text-decoration: none; color: black;"
+        href="/cliente/login_cliente" >
+        <span  style=" color: #F7F8F9; font-weight: 600;"> Entrar </span>
+        </a>
+        </div>
+        </div>
         </div>
       </div>
     </nav>
@@ -72,6 +81,7 @@
         <!-- categorias -->
 
       <div class="container categorias">
+
         <h3 class="fw-bold mb-5 mt-5" style="font-size: 20px;">
           Categorias
         </h3>
@@ -79,84 +89,77 @@
           <div class="col-12 mx-2 ">
             <div class="owl-carousel owl-theme">
               <div class="item mb-4" style="width: 7em;">
+                <a  style=" text-decoration: none;" href="/cliente/login_cliente">
                 <div class="card border-0 shadow ">
-                  <img src="..." alt="" class="" />
-                  <div class="card-body rounded-3 py-2 px-3" style="background-color:#ffffff;">
-                    <img src="burger.svg" style="width: 90%; margin: auto;" alt="" class="boxanimation" />
-                  </div>
+                  <img src="https://i.pinimg.com/originals/6c/ee/58/6cee589c2f553320ee93e5afced09766.png" alt="" class="card-img  m-auto" />
                 </div>
                 <div class="card-title text-center mt-3">
                   <h4 class="category">
                     Lanches
                   </h4>
                 </div>
+              </a>
               </div>
 
               <div class="item mb-4" style="width: 7em;">
+               <a  style=" text-decoration: none;" href="/cliente/login_cliente">
                 <div class="card border-0 shadow">
-                  <img src="..." alt="" class="card-img-top" />
-                  <div class="card-body rounded-3 py-2 px-3" style="background-color:#ffffff;">
-                    <img src="promo.svg" style="width: 90%; margin: auto;" alt="" class="" />
-                  </div>
+                  <img src="https://cdn-icons-png.flaticon.com/512/6272/6272335.png" alt="" class="card-img w-75 m-auto" />
                 </div>
                 <div class="card-title text-center mt-3">
                   <h4 class="category">
                   Promoções
                   </h4>
                 </div>
+                </a>
               </div>
               <div class="item mb-4" style="width: 7em;">
+               <a  style=" text-decoration: none;" href="/cliente/login_cliente">
                 <div class="card border-0 shadow">
-                  <img src="1.jpg" alt="" class="card-img-top" />
-                  <div class="card-body rounded-3 py-2 px-3" style="background-color:#ffffff;">
-                    <img src="bebida.svg" style="width: 90%; margin: auto;" alt="" class="" />
-                  </div>
+                  <img src="https://moteldosandes.com.br/wp-content/uploads/2021/09/BEBIDAS.png" alt="" class="card-img  m-auto" />
                 </div>
                 <div class="card-title text-center mt-3">
                   <h4 class="category">
                     Bebidas
                   </h4>
                 </div>
+                </a>
               </div>
               <div class="item mb-4" style="width: 7em;">
+               <a  style=" text-decoration: none;" href="/cliente/login_cliente">
                 <div class="card border-0 shadow">
-                  <img src="1.jpg" alt="" class="card-img-top" />
-
-                  <div class="card-body rounded-3 py-2 px-3" style="background-color:#ffffff;">
-                    <img src="sorvete.svg"  style="width: 90%; margin: auto;" alt="" class="" />
-                  </div>
+                  <img src="https://www.acailake.com.br/wp-content/uploads/2021/02/copo-promo-1.png" alt="" class="card-img w- m-auto" />
                 </div>
                 <div class="card-title text-center mt-3">
                   <h4 class="category">
-                    Doces
+                    Sobremesas
                   </h4>
                 </div>
+                </a>
               </div>
               <div class="item mb-4" style="width: 7em;">
+               <a  style=" text-decoration: none;" href="/cliente/login_cliente">
                 <div class="card border-0 shadow">
-                  <img src="1.jpg" alt="" class="card-img-top" />
-                  <div class="card-body rounded-3 py-2 px-3" style="background-color:#ffffff;">
-                    <img src="sushi.svg" style="width: 90%; margin: auto;" alt="" class="" />
-                  </div>
+                  <img src="https://static.wixstatic.com/media/2cd43b_e5828aa119524592ab00126dfa48a944~mv2.png/v1/fill/w_320,h_318,q_90/2cd43b_e5828aa119524592ab00126dfa48a944~mv2.png" alt="" class="card-img w-75  m-auto" />
                 </div>
                 <div class="card-title text-center mt-3">
                   <h4 class="category">
                     Japonesa
                   </h4>
                 </div>
+                </a>
               </div>
               <div class="item mb-4" style="width: 7em;">
+               <a  style=" text-decoration: none;" href="/cliente/login_cliente">
                 <div class="card border-0 shadow">
-                  <img src="1.jpg" alt="" class="card-img-top" />
-                  <div class="card-body rounded-3 py-2 px-3" style="background-color:#ffffff;">
-                    <img src="pizza.svg" style="width: 90%; margin: auto;" alt="" class="" />
-                  </div>
+                  <img src="https://pizzariadahora.com.br/wp-content/uploads/2022/04/pizza.png" alt="" class="card-img w-75 m-auto" />
                 </div>
                 <div class="card-title text-center mt-3">
                   <h4 class="category">
                     Pizza
                   </h4>
                 </div>
+                </a>
               </div>
             </div>
           </div>
@@ -316,19 +319,16 @@
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
               <ul class="list-unstyled list-inline social text-center">
-                <li class="list-inline-item"><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-facebook"></i></a></li>
-                <li class="list-inline-item"><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-instagram"></i></a></li>
-                <li class="list-inline-item"><a href="https://www.fiverr.com/share/qb8D02" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.instagram.com/flashfood88/" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="fa fa-envelope"></i></a></li>
               </ul>
             </div>
             <hr style="color: white;">
           </div>
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
-              <p><u><a href="https://www.nationaltransaction.com/">Lorem ipsum dolor .</a></u> Consectetur adipisicing elit</p>
-              <p class="h6">© All right Reversed.<a class="text-green ml-2" href="#" target="_blank"> Flash food</a></p>
+              <a href="#" class="h6">© Copyright 2022 - FlashFood - Todos os direitos reservados</a>
             </div>
-            <hr style="color: white;">
           </div>
         </div>
       </section>
@@ -342,18 +342,18 @@
       $(".owl-carousel").owlCarousel({
         loop: false,
 
-        margin: 10,
+   margin: 10,
         responsive: {
           200: {
-            items: 1.5
+            items: 2
           },
 
           300: {
-            items: 2.3
+            items: 2.5
           },
 
           400: {
-            items: 3
+            items: 3.1
           },
 
           500: {
@@ -363,6 +363,11 @@
           600: {
             items: 4.2
           },
+
+          700: {
+            items: 4.5
+          },
+
           800: {
             items: 5.3
           },

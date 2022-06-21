@@ -1,11 +1,19 @@
-from flask import Blueprint, request, redirect, render_template, url_for
-from backend.models import Restaurante, Cliente, Cardapio
+import os
+from flask import Blueprint, request, redirect, render_template, flash, send_from_directory, url_for
+from backend.models import Restaurante, Cliente, Cardapio, Pedidofeito
 from flask_login import current_user, login_required
 from backend.ext.database import db
+from backend.app import create_app
+from werkzeug.utils import secure_filename
 
 
 bp = Blueprint('restaurante', __name__, url_prefix='/restaurante', template_folder='templates')
 
+ALLOWED_EXTENSIONS = {'png', 'jpeg', 'jpg'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route("/cadastro_restaurante", methods=["GET", "POST"])
 def cadastro_restaurante():
@@ -45,7 +53,7 @@ def cadastro_restaurante():
             db.session.add(novo)
             db.session.commit()
 
-        return redirect("/cliente/pagina_cliente")
+        return redirect(url_for('cliente.pagina_cliente', id=cliente.id))
     else:
         return render_template("restaurante/cadastro_restaurante.html", cidades=cidades, categorias=categorias)
 
@@ -58,6 +66,12 @@ def pagina_restaurante(id):
     cardapios = Cardapio.query.filter_by(restaurante_id = restaurante.id).all()
     return render_template("restaurante/pagina_restaurante.html", restaurante=restaurante, cardapio=cardapio, cardapios=cardapios)
 
+@bp.route("/excluir_restaurante/<int:id>", methods=["POST"])
+def excluir_restaurante(id):
+    excluir = Restaurante.query.get_or_404(id)
+    db.session.delete(excluir)
+    db.session.commit()
+    return "Apagou restaurante"
 
 @bp.route('/excluircardapio/<int:id>', methods = ["POST"])
 def excluircardapio(id):
@@ -85,9 +99,9 @@ def editar_perfil(id):
 
     categorias = {
         "-------":"-------",
-        "pizza": "PIZZA",
-        "doces":"DOCES",
-        "hamburguer":"HAMBURGUER",
+        "Pizzas": "PIZZA",
+        "Doces":"DOCES",
+        "Lanches":"HAMBURGUER",
         }
     edit = Restaurante.query.get_or_404(id)
     if request.method == "POST":
@@ -112,7 +126,11 @@ def adicionar_cardapio():
     cliente = current_user
     restaurante = Restaurante.query.filter_by(cliente_id = cliente.id).first()
     if request.method == "POST":
+        if 'imagem_prato' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
         novo=Cardapio()
+        imagem_prato = request.files["imagem_prato"]
         novo.nome_prato = request.form["nome_prato"]
         novo.valor = request.form["valor"]
         novo.ingredientes = request.form["ingredientes"]
@@ -120,12 +138,39 @@ def adicionar_cardapio():
         novo.restaurante_id = restaurante.id
         novo.restaurante_adicionou = restaurante.nome_restaurante
         novo.restaurante_categoria = restaurante.categoria
+        try:
+            if imagem_prato.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
 
-        db.session.add(novo)
-        db.session.commit()
-        return redirect("/restaurante/pagina_restaurante/adicionar_cardapio")
+            if imagem_prato and allowed_file(imagem_prato.filename):
+                filename = secure_filename(imagem_prato.filename)
+                app = create_app()
+                imagem_prato.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                novo.imagem_prato = filename
+
+            db.session.add(novo)
+            db.session.commit()
+            return redirect(url_for('restaurante.pagina_restaurante', id=restaurante.id))
+        except:
+            return "Não deu certo salvar a imagem"
     else:
         return render_template("restaurante/adicionar_cardapio.html")
+
+@bp.route("/upload/<int:id>/<path:filename>")
+@login_required
+def upload(id,filename):
+    app = create_app()
+    return send_from_directory(app.config['UPLOAD_FOLDER'], id, filename)
+
+@bp.route("/pedido_solicitado/<int:id>")
+@login_required
+def pedido_solicitado(id):
+    restaurante = Restaurante.query.get_or_404(id)
+    pedido = Pedidofeito.query.filter(Pedidofeito.restaurante_id.contains(id))
+    pedidos = Pedidofeito.query.filter_by(restaurante_id=restaurante.id).all()
+    return render_template("restaurante/pedido_solicitado.html", restaurante=restaurante, pedido=pedido, pedidos=pedidos)
 
 def init_app(app):
     app.register_blueprint(bp)
